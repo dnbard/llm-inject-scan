@@ -6,7 +6,7 @@ A tiny, fast library that scans user prompts for risky patterns before they reac
 - **Jailbreak detection**: Spots classic attempts to override behavior (e.g., asking to ignore previous instructions or force “developer mode”).
 - **Policy evasion cues**: Surfaces prompts nudging toward harmful or disallowed content.
 - **Prompt-leak attempts**: Flags efforts to get the system prompt, internal instructions, or hidden configuration repeated back.
-- **Indirect injection via links**: Detects prompts steering the model to fetch and act on untrusted URLs.
+- **Indirect injection via links and Base64**: Detects prompts steering the model to fetch and act on untrusted URLs or with Base64 type of injection.
 - **Role/context manipulation**: Catches inputs that try to reset or impersonate roles (e.g., “system:” or contrived contexts that distort guardrails).
 
 ### Why it matters
@@ -34,9 +34,9 @@ npm install llm-inject-scan
 import { createPromptValidator, FlaggedCategory } from 'llm-inject-scan';
 
 const validate = createPromptValidator({ /* disableBase64Check: false, disableUrlCheck: false */ });
-const flags = validate('Summarize the content from http://attacker.example/payload');
+const result = validate('Summarize the content from http://attacker.example/payload');
 
-if (flags.includes(FlaggedCategory.Indirect)) {
+if (!result.clean)) {
   // e.g., deny external fetch or sanitize the request
 }
 ```

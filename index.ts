@@ -11,7 +11,14 @@ export enum FlaggedCategory {
   RoleContext = 'roleContext',
 }
 
+export interface LLMInjectResult {
+  flags: FlaggedCategory[];
+  clean: boolean;
+}
+
 type Locale = 'en-US';
+
+const DEFAULT_LOCALE: Locale = 'en-US';
 
 interface LLMInjectOptions {
   locale?: Locale;
@@ -60,7 +67,7 @@ const detectMaliciousPromptV2 = (
   rulesByCategory: InjectionRulesByCategory,
   options: LLMInjectOptions,
   userInput: string
-): FlaggedCategory[] => {
+): LLMInjectResult => {
   const flaggedCategories: FlaggedCategory[] = [];
   const { disableBase64Check = false, disableUrlCheck = false } = options;
 
@@ -99,18 +106,21 @@ const detectMaliciousPromptV2 = (
     if (fuzzyHit) flaggedCategories.push(FlaggedCategory.Evasion);
   }
 
-  return flaggedCategories;
+  return {
+    flags: flaggedCategories,
+    clean: flaggedCategories.length === 0,
+  };
 };
 
 export const createPromptValidator = (options: LLMInjectOptions = {}) => {
   const dictionaries = {
-    'en-US': injectionRulesEnUS,
+    [DEFAULT_LOCALE]: injectionRulesEnUS,
   };
 
-  const { locale = 'en-US' } = options;
+  const { locale = DEFAULT_LOCALE } = options;
   const injectionRules = dictionaries[locale];
 
-  return (userInput: string): FlaggedCategory[] => detectMaliciousPromptV2(
+  return (userInput: string): LLMInjectResult => detectMaliciousPromptV2(
     injectionRules,
     options,
     userInput

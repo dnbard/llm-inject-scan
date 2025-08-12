@@ -1,7 +1,7 @@
-import { normalizeString } from './utils/normalizeString';
-import { Rule, anyRuleMatches } from './utils/rules';
-import { fuzzyIncludesTransposition } from './utils/fuzzyMatching';
-import { isBase64Like, containsUrl, startsWithRoleLabel } from './utils/detectors';
+import { normalizeString } from '../utils/normalizeString';
+import { Rule, anyRuleMatches } from '../utils/rules';
+import { fuzzyIncludesTransposition } from '../utils/fuzzyMatching';
+import { isBase64Like, containsUrl, startsWithRoleLabel } from '../utils/detectors';
 
 export enum FlaggedCategory {
   Jailbreak = 'jailbreak',

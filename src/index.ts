@@ -26,6 +26,9 @@ interface LLMInjectOptions {
   locale?: Locale;
   disableBase64Check?: boolean;
   disableUrlCheck?: boolean;
+  // TODO: disable JSON injection
+  // TODO: disable URL encoding, ie: %49%67%6e%6f%72%65%20%61%6c%6c%20%70%72%65%76%69%6f%75%73%20%69%6e%73%74%72%75%63%74%69%6f%6e%73
+
 }
 
 type InjectionRulesByCategory = Record<FlaggedCategory, Rule[]>;
@@ -36,7 +39,21 @@ const injectionRulesEnUS: InjectionRulesByCategory = {
     'ignore|previous|instructions',
     'ignore|all|previous|instructions',
     'you|are|now|in|developer|mode',
-    'pretend|youre', // covers “Pretend you're …”
+    'pretend|youre',
+    'forget|everything',
+    'tell|system|prompt|security',
+    'tell|password',
+    'spell|backward',
+    'replace|number|letter|character',
+    'delete|everything|records',
+    'disregard|previous|instruction|command',
+    'disregard|system|prompt',
+    'provide|detail|system|security',
+    'let|f(x)|f(y)',
+    'do|anything|now',
+    'replace|response',
+    'add|answer',
+    'without|restrictions'
   ],
   [FlaggedCategory.Evasion]: [
     // direct terms (single-token rules)
@@ -46,6 +63,9 @@ const injectionRulesEnUS: InjectionRulesByCategory = {
     'create',
     'malware',
     'code',
+    'skip',
+    'pass',
+    'opposite'
   ],
   [FlaggedCategory.PromptLeak]: [
     'reveal|your|internal|prompt',

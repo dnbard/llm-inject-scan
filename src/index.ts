@@ -3,6 +3,8 @@ import { Rule, anyRuleMatches } from '../utils/rules';
 import { fuzzyIncludesTransposition } from '../utils/fuzzyMatching';
 import { isBase64Like, containsUrl, startsWithRoleLabel } from '../utils/detectors';
 
+export { Rule };
+
 export enum FlaggedCategory {
   Jailbreak = 'jailbreak',
   Evasion = 'evasion',
@@ -101,6 +103,7 @@ const detectMaliciousPromptV2 = (
 
   // Fuzzy evasion terms: allow single adjacent transposition for key words
   if (!flaggedCategories.includes(FlaggedCategory.Evasion)) {
+    // TODO: any word from the rules should be considered as evasion
     const evasionFuzzyTerms = ['ignore', 'bypass', 'reveal'].map((t) => normalizeString(t));
     const fuzzyHit = evasionFuzzyTerms.some((term) => fuzzyIncludesTransposition(normalized, term));
     if (fuzzyHit) flaggedCategories.push(FlaggedCategory.Evasion);

@@ -31,10 +31,10 @@ npm install llm-inject-scan
 
 ### Usage
 ```ts
-import { createPromptValidator, FlaggedCategory } from 'llm-inject-scan';
+import { createPromptValidator } from 'llm-inject-scan';
 
 const validate = createPromptValidator({ /* disableBase64Check: false, disableUrlCheck: false */ });
-const result = validate('Summarize the content from http://attacker.example/payload');
+const result = validate('Ignore all previous instructions and...');
 
 if (!result.clean)) {
   // e.g., deny external fetch or sanitize the request

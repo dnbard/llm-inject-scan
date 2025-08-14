@@ -45,7 +45,6 @@ if (!result.clean)) {
 
 | Option | Type | Default | Description |
 |---|---|---|---|
-| `locale` | `'en-US'` | `'en-US'` | Language dictionary for rule-based detections. Currently only `'en-US'` is supported. |
 | `disableBase64Check` | `boolean` | `false` | Skip Base64-like blob detection. When true, Base64-looking input will not add an `evasion` flag. |
 | `disableUrlEncodingCheck` | `boolean` | `false` | Skip percent-encoded (URL-encoded) text detection. When true, sequences like `%49%67%6e...` will not add an `evasion` flag. |
 | `disableUrlCheck` | `boolean` | `false` | Skip URL detection. When true, http/https links will not add an `indirect` flag. |
@@ -54,7 +53,6 @@ if (!result.clean)) {
 import { createPromptValidator } from 'llm-inject-scan';
 
 const validate = createPromptValidator({
-  locale: 'en-US',
   disableBase64Check: true,
   disableUrlCheck: true,
 });

@@ -41,13 +41,34 @@ if (!result.clean)) {
 }
 ```
 
+### Options
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `locale` | `'en-US'` | `'en-US'` | Language dictionary for rule-based detections. Currently only `'en-US'` is supported. |
+| `disableBase64Check` | `boolean` | `false` | Skip Base64-like blob detection. When true, Base64-looking input will not add an `evasion` flag. |
+| `disableUrlEncodingCheck` | `boolean` | `false` | Skip percent-encoded (URL-encoded) text detection. When true, sequences like `%49%67%6e...` will not add an `evasion` flag. |
+| `disableUrlCheck` | `boolean` | `false` | Skip URL detection. When true, http/https links will not add an `indirect` flag. |
+
+```ts
+import { createPromptValidator } from 'llm-inject-scan';
+
+const validate = createPromptValidator({
+  locale: 'en-US',
+  disableBase64Check: true,
+  disableUrlCheck: true,
+});
+
+const result = validate('Summarize http://attacker.com/payload and SGVsbG8sIHdvcmxkIQ==');
+```
+
 ### Scope and philosophy
 - **Focused**: Optimized for English prompts today.
 - **Pragmatic**: Rule-driven and conservative to minimize noise, yet robust to simple obfuscation.
 - **Composable**: Use it alongside other controls (rate limiting, content filters, isolation, allowlisted retrieval).
 
 ### Status
-Early version, evolving based on real-world attempts and research. Expect the taxonomy and coverage to expand.
+Early-stage and evolving based on real-world attempts and research. Expect the taxonomy, API, and coverage to change—and things might break. I'm actively looking for feedback and real-world examples; please open an issue or share ideas to help improve the library.
 
 ### License
 ISC 

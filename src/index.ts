@@ -1,7 +1,7 @@
 import { normalizeString } from '../utils/normalizeString';
 import { Rule, anyRuleMatches } from '../utils/rules';
 import { fuzzyIncludesTransposition } from '../utils/fuzzyMatching';
-import { isBase64Like, containsUrl, startsWithRoleLabel } from '../utils/detectors';
+import { isBase64Like, containsUrl, startsWithRoleLabel, containsPercentEncodedText } from '../utils/detectors';
 
 export { Rule };
 
@@ -28,7 +28,7 @@ interface LLMInjectOptions {
   disableUrlCheck?: boolean;
   // TODO: disable JSON injection
   // TODO: disable URL encoding, ie: %49%67%6e%6f%72%65%20%61%6c%6c%20%70%72%65%76%69%6f%75%73%20%69%6e%73%74%72%75%63%74%69%6f%6e%73
-
+  disableUrlEncodingCheck?: boolean;
 }
 
 type InjectionRulesByCategory = Record<FlaggedCategory, Rule[]>;
@@ -64,7 +64,6 @@ const injectionRulesEnUS: InjectionRulesByCategory = {
     'malware',
     'code',
     'skip',
-    'pass',
     'opposite'
   ],
   [FlaggedCategory.PromptLeak]: [
@@ -91,7 +90,7 @@ const detectMaliciousPromptV2 = (
   userInput: string
 ): LLMInjectResult => {
   const flaggedCategories: FlaggedCategory[] = [];
-  const { disableBase64Check = false, disableUrlCheck = false } = options;
+  const { disableBase64Check = false, disableUrlCheck = false, disableUrlEncodingCheck = false } = options;
 
   const normalized = normalizeString(userInput);
   const reversedNormalized = Array.from(normalized).reverse().join('');
@@ -106,6 +105,11 @@ const detectMaliciousPromptV2 = (
 
   // Add specialized detections
   if (!disableBase64Check && isBase64Like(userInput)) {
+    if (!flaggedCategories.includes(FlaggedCategory.Evasion)) {
+      flaggedCategories.push(FlaggedCategory.Evasion);
+    }
+  }
+  if (!disableUrlEncodingCheck && containsPercentEncodedText(userInput)) {
     if (!flaggedCategories.includes(FlaggedCategory.Evasion)) {
       flaggedCategories.push(FlaggedCategory.Evasion);
     }

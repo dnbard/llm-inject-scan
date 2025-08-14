@@ -1,6 +1,6 @@
 {
   "name": "llm-inject-scan",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "dist/index.ts",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -16,7 +16,22 @@
     "build": "tsup src/index.ts --format cjs,esm --dts --clean",
     "prepublishOnly": "npm run build"
   },
-  "keywords": [],
+  "keywords": [
+    "llm",
+    "prompt-injection",
+    "jailbreak-detection",
+    "guardrails",
+    "ai-guardrails",
+    "ai-security",
+    "prompt-security",
+    "prompt-leak",
+    "injection",
+    "security",
+    "openai",
+    "anthropic",
+    "gpt",
+    "llm-injection"
+  ],
   "author": "",
   "license": "ISC",
   "description": "",
